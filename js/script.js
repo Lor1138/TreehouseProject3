@@ -1,10 +1,12 @@
 
 const otherJob = document.querySelector('#other-title');
 const shirtColor = document.querySelector('#color');
-const shirtTheme = document.querySelector('#design')
 const pickTheme = document.createElement("option");
-
-
+const jsPuns = document.querySelector("#jsPuns");
+const heartJS = document.querySelector("#heartJS");
+const shirtTheme = document.querySelector("#design");
+const jsPunsCol = document.querySelector("#js-puns");
+const heartJSCol = document.querySelector("#heart-js");
 
 
 
@@ -24,20 +26,39 @@ const pickTheme = document.createElement("option");
         shirtColor.add(pickTheme);
         shirtColor.setAttribute("disabled", false);
 
-        //if "js puns" or "I heart JS" is selected use change handler to make the "colors" menu update
-        shirtTheme.addEventListener('change', () =>{
-            if (shirtTheme.option.value === "js puns"){
-                
-
-            } if (shirtTheme.option.value === "heart js"){
-
-            } else {
+    function showSel(){
+        console.log(shirtTheme.value);
+          let current_value = shirtTheme.value;
+            if (current_value === "js puns"){
+                heartJSCol.hidden = true;
+                jsPunsCol.hidden = false;
+                jsPunsCol.selected = true;
+                pickTheme.remove();
+                pickTheme.selected = false;
+                shirtColor.removeAttribute("disabled", true);
+            } else if (current_value === 'heart js'){
+                jsPunsCol.hidden = true;
+                heartJSCol.hidden = false;
+                heartJSCol.selected = true;
+                pickTheme.remove();
+                pickTheme.selected = false;
+                shirtColor.removeAttribute("disabled", true);
+            } else if(current_value === "Select Theme") {
                 shirtColor.setAttribute("disabled", false);
+                shirtColor.add(pickTheme);
+                pickTheme.selected = true;
+
             }
+        
+    }
+
+        //if "js puns" or "I heart JS" is selected use change handler to make the "colors" menu update
+        shirtTheme.addEventListener('change', () => {
+               showSel();
 
         });
 
-
-
+        
+    
 
 
