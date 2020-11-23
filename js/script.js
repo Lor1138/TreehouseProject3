@@ -14,7 +14,10 @@ const activityTotalDiv = document.createElement('div');
 const activityInput = document.querySelectorAll('.activities input');
 //This changes, so used let instead of const
 let activityCost = 0;
-console.log(activityInput)
+//name validation
+const inputName = document.querySelector("#name"); 
+const emailInput = document.querySelector("#mail");
+
 
 
     //This function autofocuses the name input when the browser loads.
@@ -59,7 +62,7 @@ console.log(activityInput)
         });
 
         //Event listener for activity section
-        activitySection.addEventListener('click', (e) => {
+        activitySection.addEventListener('change', (e) => {
             let activityChoice = e.target;
             const activityValue = activityChoice.getAttribute('data-cost');
             
@@ -74,20 +77,66 @@ console.log(activityInput)
                 }
               for(let i = 0; i < activityInput.length; i++){
                     const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
-                    const currentActivity = activityChoice.getAttribute('data-day-and-time')
-
+                    const currentActivity = activityChoice.getAttribute('data-day-and-time');
+                    const checkboxLbl = activitySection.getElementsByTagName('label');                    
+                    
                     if(currentActivity === activityDayTime && activityChoice !== activityInput[i]){
                         if(activityChoice.checked === true){
                             activityInput[i].disabled = true;
                         } else {
                             activityInput[i].disabled = false;
-                            
                         }
-                      } 
+                    } 
                 }  
+            
               
         });
 
+
+        // Form validation section
+
+        inputName.addEventListener('keyup', (event)=> {        
+            if(inputName.value.length > 0 ){
+                inputName.style.borderColor = "green";
+                errorName.innerHTML = " ";
+                console.log("removing style")
+;               return true;
+            } else {
+                console.log("name working")
+                inputName.style.borderColor = "red";
+                errorName.innerHTML = "<span style ='color: red;'>" +"Please enter a name</span>";
+                return false;
+
+            }
+    
+        });
+
+        emailInput.addEventListener("keyup", (event)=>{
+            if(emailInput.value.length === 0){
+                errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
+                emailInput.style.borderColor = "red";
+                console.log("Put your email")
+                return false;
+            } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value) !== true){
+                errorMail.innerHTML = "<span style ='color: red;'>" +"Email must contain (.) and (@)</span>"
+                emailInput.style.borderColor = "red";
+                console.log("proper email address please");
+                return false;
+            } else {
+                emailInput.style.borderColor = "green";
+                errorMail.innerHTML = " ";
+                console.log("valid email")
+;               return true;
+
+            }
+        });
+      
+        
+
+        
+
+        
+        
         
 
 
