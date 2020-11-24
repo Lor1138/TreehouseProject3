@@ -15,8 +15,8 @@ const activityInput = document.querySelectorAll('.activities input');
 //This changes, so used let instead of const
 let activityCost = 0;
 //form validation for name and email section 
-const inputName = document.querySelector("#name"); 
-const emailInput = document.querySelector("#mail");
+const inputName = document.getElementById("name"); 
+const emailInput = document.getElementById("mail");
 //form validation for payment section
 const paymentMenu = document.getElementById('payment');
 const payPalOpt = document.getElementById('paypal');
@@ -153,12 +153,63 @@ const creditCardOpt = document.getElementById('credit-card');
         });
 
 
+        let creditCardNum = document.getElementById("cc-num");
+        let creditCardZip = document.getElementById("zip");
+        let creditCardCvv = document.getElementById("cvv");
 
+        creditCardNum.addEventListener("keyup", (event)=>{
+            if(creditCardNum.value.length === 0){
+                errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+                creditCardNum.style.borderColor = "red";
+                return false;
+            } else if(/^\d{4}([ \-]?)((\d{6}\1?\d{5})|(\d{4}\1?\d{4}\1?\d{4}))$/.test(creditCardNum.value) !== true){
+                errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+                creditCardNum.style.borderColor = "red";
+                return false;
+            } else {
+                creditCardNum.style.borderColor = "green";
+                errorCardNum.innerHTML = " ";
+;               return true;
 
+            }
+        });
+
+        creditCardZip.addEventListener("keyup", (event)=>{
+            if(creditCardZip.value.length === 0){
+                errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a zipcode</span>"
+                creditCardZip.style.borderColor = "red";
+                return false;
+            }else if(/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(creditCardZip.value) !== true){
+                    errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a valid zip code</span>"
+                    creditCardZip.style.borderColor = "red";
+                    return false;
+            } else {
+                creditCardZip.style.borderColor = "green";
+                errorZip.innerHTML = " ";
+;               return true;
+
+            }
+        });
+        
+        creditCardCvv.addEventListener("keyup", (event)=>{
+            if(creditCardCvv.value.length === 0){
+                errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a CVV</span>"
+                creditCardCvv.style.borderColor = "red";
+                return false;
+            } else if(/(^\d{3}$)/.test(creditCardCvv.value) !== true){
+                errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a valid CVV</span>"
+                creditCardCvv.style.borderColor = "red";
+                return false;
+            } else {
+                creditCardCvv.style.borderColor = "green";
+                errorCvv.innerHTML = " ";
+;               return true;
+
+            }
+        });
 
 
       
-
 
         
 
