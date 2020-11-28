@@ -1,8 +1,8 @@
 //variable to store element of other job in Job Section
+const jobTitle = document.getElementById("title");
 const otherJob = document.querySelector("#other-title");
 //variables for TShirt Selection section
 const shirtColor = document.querySelector("#color");
-const pickTheme = document.createElement("option");
 const shirtTheme = document.querySelector("#design");
 const jsPunsCol = document.querySelector("#js-puns");
 const heartJSCol = document.querySelector("#heart-js");
@@ -22,8 +22,8 @@ const paymentMenu = document.getElementById('payment');
 const payPalOpt = document.getElementById('paypal');
 const bitcoinOpt = document.getElementById('bitcoin');
 const creditCardOpt = document.getElementById('credit-card');
-
-
+//Subit button
+const submitButton = document.getElementById('button');
 
     //This function autofocuses the name input when the browser loads.
     function nameFocus() {
@@ -31,42 +31,41 @@ const creditCardOpt = document.getElementById('credit-card');
     }
         nameFocus(name);
 
-        //displays only if JavaScript is not enabled.
+        //displays only if JavaScript is not enabled and other is selected
         otherJob.style.display = 'none';
-
-        //disables color menu for tshirt until a theme is chosen
-        pickTheme.value = "pick-theme";
-        pickTheme.text = "Please select a T-shirt theme"
-        shirtColor.add(pickTheme);
-        pickTheme.selected = true;
-        pickTheme.hidden = true; 
-        shirtColor.setAttribute("disabled", false);
+        jobTitle.addEventListener("change", e =>{
+            if(jobTitle.value === "other"){
+                otherJob.style.display = 'block';
+                } else {
+                    otherJob.style.display = 'none';
+                }
+           });
+        
+        //unless a shirt theme is selected, the color menu will remain hidden
+        shirtColor.style.display = 'none';
+        shirtTheme.addEventListener("change", e =>{
+            if(shirtTheme.value === "heart js" || shirtTheme.value === "js puns"){
+                shirtColor.style.display = 'block';
+            } else {
+                shirtColor.style.display = 'none';
+            }
+        })
 
         //if "js puns" or "I heart JS" is selected use change handler to make the "colors" menu update
-        shirtTheme.addEventListener('change', (event) => {
+           shirtTheme.addEventListener('change', (event) => {
                 let target = event.target.value;
                      if (target === "heart js") {
                         jsPunsCol.hidden = true;
                         heartJSCol.hidden = false;
                         tomato.selected = true;
-                        shirtColor.removeAttribute("disabled", true);
-                    } else if (target === "js puns") {
+                    } if (target === "js puns") {
                         heartJSCol.hidden = true;
                         jsPunsCol.hidden = false;
                         cornflowerblue.selected = true;
-                        shirtColor.removeAttribute("disabled", true);
-                    } else if(target === "select-theme") {
-                        pickTheme.value = "pick-theme";
-                        pickTheme.text = "Please select a T-shirt theme"
-                        shirtColor.add(pickTheme);
-                        pickTheme.selected = true;
-                        pickTheme.hidden = true;
-                        shirtColor.setAttribute("disabled", false);
-                    }
-
-        });
-
+                    } 
+               });
         //Event listener for activity section
+       const checkActivity = () =>{
         activitySection.addEventListener('change', (e) => {
             let activityChoice = e.target;
             const activityValue = activityChoice.getAttribute('data-cost');
@@ -83,37 +82,55 @@ const creditCardOpt = document.getElementById('credit-card');
               for(let i = 0; i < activityInput.length; i++){
                     const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
                     const currentActivity = activityChoice.getAttribute('data-day-and-time');
-                    const checkboxLbl = activitySection.getElementsByTagName('label');                    
+                    const checkboxLabel = activityInput.parentNode;
                     
                     if(currentActivity === activityDayTime && activityChoice !== activityInput[i]){
                         if(activityChoice.checked === true){
                             activityInput[i].disabled = true;
                         } else {
                             activityInput[i].disabled = false;
+                            
                         }
                     } 
                 }  
+            });
+        
+        }
+        console.log(activityInput);
+        //Make sure at least one activity is selected before submitting form
+        const checkActivityValid = () => {
+            for(let i = 0; i < activityInput.length; i++){
+                if(activityInput[i].checked = false){
+                    if(activityInput[i].checked = true){
+                        return true;
+                    } else {
+                        activitySection.appendChild('div').innerHTML = "Please select at least one activity";
+                        return false;
+                    }
+                  }
+                }
             
-              
-        });
-
+        }
 
         // Form validation section
 
+        //shows and error if name is left empty
+
+        const checkName= () => { 
         inputName.addEventListener('keyup', (event)=> {        
             if(inputName.value.length > 0 ){
                 inputName.style.borderColor = "green";
                 errorName.innerHTML = " ";
-;               return true;
+               return true;
             } else {
                 inputName.style.borderColor = "red";
                 errorName.innerHTML = "<span style ='color: red;'>" +"Please enter a name</span>";
                 return false;
-
             }
-    
         });
-
+    }
+        //shows and error if empty or not a valid email format
+        const checkEmail = () => {
         emailInput.addEventListener("keyup", (event)=>{
             if(emailInput.value.length === 0){
                 errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
@@ -126,15 +143,16 @@ const creditCardOpt = document.getElementById('credit-card');
             } else {
                 emailInput.style.borderColor = "green";
                 errorMail.innerHTML = " ";
-;               return true;
+                return true;
 
             }
         });
-
+    }
+        //payment selection
         bitcoinOpt.style.display = 'none';
         payPalOpt.style.display = 'none';
 
-
+        //hides payment options until one is selected. Credit is displayed by default
         paymentMenu.addEventListener('change', e => {
             if(paymentMenu.value === "paypal" ){
                 creditCardOpt.style.display = 'none';
@@ -152,11 +170,12 @@ const creditCardOpt = document.getElementById('credit-card');
             
         });
 
-
+        //credit card validation
         let creditCardNum = document.getElementById("cc-num");
         let creditCardZip = document.getElementById("zip");
         let creditCardCvv = document.getElementById("cvv");
-
+        
+        const checkCardNum = () => {
         creditCardNum.addEventListener("keyup", (event)=>{
             if(creditCardNum.value.length === 0){
                 errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
@@ -169,11 +188,11 @@ const creditCardOpt = document.getElementById('credit-card');
             } else {
                 creditCardNum.style.borderColor = "green";
                 errorCardNum.innerHTML = " ";
-;               return true;
-
+               return true;
             }
         });
-
+    }
+        const checkZip = () => {
         creditCardZip.addEventListener("keyup", (event)=>{
             if(creditCardZip.value.length === 0){
                 errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a zipcode</span>"
@@ -186,11 +205,11 @@ const creditCardOpt = document.getElementById('credit-card');
             } else {
                 creditCardZip.style.borderColor = "green";
                 errorZip.innerHTML = " ";
-;               return true;
-
+              return true;
             }
         });
-        
+    }
+        const checkCvv = () => {
         creditCardCvv.addEventListener("keyup", (event)=>{
             if(creditCardCvv.value.length === 0){
                 errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a CVV</span>"
@@ -203,15 +222,36 @@ const creditCardOpt = document.getElementById('credit-card');
             } else {
                 creditCardCvv.style.borderColor = "green";
                 errorCvv.innerHTML = " ";
-;               return true;
-
+               return true;
             }
         });
+    }
 
-
+    checkActivity();
+    checkActivityValid();
       
+     submitButton.addEventListener('click', (e) => {
 
-        
+         let isUserNameValid = checkName(),
+         isEmailValid = checkEmail(), 
+         isActivityValid = checkActivityValid(),
+         isCardValid = checkCardNum(),
+         isZipValid = checkZip(),
+         isCvvValid = checkCvv();
+
+         let isFormValid = isUserNameValid &&
+         isEmailValid && isActivityValid && isCardValid
+         && isZipValid && isCvvValid;
+         console.log("clicked")
+
+         if (isFormValid === true){
+             return true;
+         } else {
+             return e.preventDefault();
+         }
+         
+
+     });      
 
         
         
