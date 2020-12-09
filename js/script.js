@@ -27,12 +27,6 @@ const chooseCredit = document.querySelector('option[value="credit card"]');
 const checkboxMsg = document.createElement('div');
 const submitButton = document.getElementById('button');
 
-//This function autofocuses the name input when the browser loads.
-function nameFocus() {
-  document.getElementById("name").focus();
-}
-nameFocus(name);
-
 //displays only if JavaScript is not enabled and other is selected
 otherJob.style.display = 'none';
 jobTitle.addEventListener("change", e =>{
