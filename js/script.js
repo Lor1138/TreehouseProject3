@@ -126,34 +126,38 @@ const checkName = () => {
   }
 }
 
-const validatePresence = (event) => {
+const validateName = (event) => {
   event.preventDefault();
   checkName();
 }
 
-inputName.addEventListener('blur', validatePresence);
-inputName.addEventListener('keyup', validatePresence);
+inputName.addEventListener('blur', validateName);
+inputName.addEventListener('keyup', validateName);
 
 //shows an error if empty or not a valid email format
 const checkEmail = () => {
-  emailInput.addEventListener("keyup", (event)=>{
-    if(emailInput.value.length === 0){
-      errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
-      emailInput.style.borderColor = "red";
-      return false;
-    } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value) !== true){
-      errorMail.innerHTML = "<span style ='color: red;'>" +"Email must contain (.) and (@)</span>"
-      emailInput.style.borderColor = "red";
-      return false;
-    } else {
-      emailInput.style.borderColor = "green";
-      errorMail.innerHTML = " ";
-      return true;
-
-    }
-  });
+  if(emailInput.value.length === 0){
+    errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
+    emailInput.style.borderColor = "red";
+    return false;
+  } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value) !== true){
+    errorMail.innerHTML = "<span style ='color: red;'>" +"Email must contain (.) and (@)</span>"
+    emailInput.style.borderColor = "red";
+    return false;
+  } else {
+    emailInput.style.borderColor = "green";
+    errorMail.innerHTML = " ";
+    return true;
+  }
 }
-console.log(checkEmail());
+
+const validateEmail = (event) => {
+  event.preventDefault();
+  checkEmail();
+}
+emailInput.addEventListener('blur', validateEmail);
+emailInput.addEventListener('keyup', validateEmail);
+
 //payment selection
 bitcoinOpt.style.display = 'none';
 payPalOpt.style.display = 'none';
@@ -161,20 +165,17 @@ chooseCredit.selected = true;
 
 //hides payment options until one is selected. Credit is displayed by default
 paymentMenu.addEventListener('change', e => {
+  payPalOpt.style.display = 'none';
+  creditCardOpt.style.display = 'none';
+  bitcoinOpt.style.display = 'none';
+
   if(paymentMenu.value === "paypal" ){
-    creditCardOpt.style.display = 'none';
-    bitcoinOpt.style.display = 'none';
     payPalOpt.style.display = 'block';
   }else if(paymentMenu.value === "bitcoin"){
-    creditCardOpt.style.display = 'none';
     bitcoinOpt.style.display = 'block';
-    payPalOpt.style.display = 'none';
   } else {
     creditCardOpt.style.display = 'block';
-    bitcoinOpt.style.display = 'none';
-    payPalOpt.style.display = 'none';
   }
-
 });
 
 //credit card validation
@@ -183,22 +184,32 @@ let creditCardZip = document.getElementById("zip");
 let creditCardCvv = document.getElementById("cvv");
 
 const checkCardNum = () => {
-  creditCardNum.addEventListener("keyup", (event)=>{
-    if(creditCardNum.value.length === 0){
-      errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
-      creditCardNum.style.borderColor = "red";
-      return false;
-    } else if(/^\d{4}([ \-]?)((\d{6}\1?\d{5})|(\d{4}\1?\d{4}\1?\d{4}))$/.test(creditCardNum.value) !== true){
-      errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
-      creditCardNum.style.borderColor = "red";
-      return false;
-    } else {
-      creditCardNum.style.borderColor = "green";
-      errorCardNum.innerHTML = " ";
-      return true;
-    }
-  });
+  creditCardNum.style.borderColor = "green";
+  errorCardNum.innerHTML = " ";
+
+  if( paymentMenu.value !== "credit card" ) {
+    return true;
+  }
+
+  if(creditCardNum.value.length === 0){
+    errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+    creditCardNum.style.borderColor = "red";
+    return false;
+  } else if(/^\d{4}([ \-]?)((\d{6}\1?\d{5})|(\d{4}\1?\d{4}\1?\d{4}))$/.test(creditCardNum.value) !== true){
+    errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+    creditCardNum.style.borderColor = "red";
+    return false;
+  } else {
+    return true;
+  }
 }
+
+const validateCardNum = (event) => {
+  event.preventDefault();
+  checkCardNum();
+}
+creditCardNum.addEventListener('keyup', validateCardNum);
+
 console.log(checkCardNum());
 const checkZip = () => {
   creditCardZip.addEventListener("keyup", (event)=>{
@@ -254,7 +265,7 @@ function isFormValid(){
 
 }
 
-console.log(isFormValid());
+//console.log(isFormValid());
 
 
 
