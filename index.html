@@ -20,7 +20,10 @@
         <legend>Basic Info</legend>
         
         <label for="name">Name:</label>
-        <input type="text" id="name" name="user-name">
+        <input type="text" id="name" name="user-name"
+                                     autofocus
+                                     data-invalid-element="#errorName"
+                                     data-invalid-message="Please enter a name">
         <span id="errorName" class="error" aria-live="polite"></span>
         
         <label for="mail">Email:</label>
