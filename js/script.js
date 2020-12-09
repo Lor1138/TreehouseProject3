@@ -22,7 +22,9 @@ const paymentMenu = document.getElementById('payment');
 const payPalOpt = document.getElementById('paypal');
 const bitcoinOpt = document.getElementById('bitcoin');
 const creditCardOpt = document.getElementById('credit-card');
-//Subit button
+const chooseCredit = document.querySelector('option[value="credit card"]');
+//Submit button
+const checkboxMsg = document.createElement('div');
 const submitButton = document.getElementById('button');
 
     //This function autofocuses the name input when the browser loads.
@@ -65,7 +67,7 @@ const submitButton = document.getElementById('button');
                     } 
                });
         //Event listener for activity section
-       const checkActivity = () =>{
+       const checkActivity = () => {
         activitySection.addEventListener('change', (e) => {
             let activityChoice = e.target;
             const activityValue = activityChoice.getAttribute('data-cost');
@@ -73,63 +75,63 @@ const submitButton = document.getElementById('button');
                 if(activityChoice.checked === true){
                     activityCost += +activityValue;
                     activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
+                    activitySection.appendChild(checkboxMsg).innerHTML = " ";
                 } else if (activityChoice.checked === false){
                     activityCost -= +activityValue;
                     activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
+                    activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
                 } else {
                     activityTotalDiv.style.display = 'hidden';
                 }
               for(let i = 0; i < activityInput.length; i++){
                     const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
                     const currentActivity = activityChoice.getAttribute('data-day-and-time');
-                    const checkboxLabel = activityInput.parentNode;
                     
                     if(currentActivity === activityDayTime && activityChoice !== activityInput[i]){
                         if(activityChoice.checked === true){
                             activityInput[i].disabled = true;
                         } else {
                             activityInput[i].disabled = false;
-                            
                         }
                     } 
                 }  
             });
-        
         }
-        console.log(activityInput);
+        checkActivity();
+        
         //Make sure at least one activity is selected before submitting form
         const checkActivityValid = () => {
-            for(let i = 0; i < activityInput.length; i++){
-                if(activityInput[i].checked = false){
-                    if(activityInput[i].checked = true){
-                        return true;
-                    } else {
-                        activitySection.appendChild('div').innerHTML = "Please select at least one activity";
-                        return false;
-                    }
-                  }
+            let checkbox = document.querySelector('input[type="checkbox"]:checked');
+                if(checkbox !== null){
+                    return true;
+                } else {
+                    activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
+                    return false;
+                    } 
+                
                 }
-            
-        }
-
+        
+        console.log(checkActivityValid());
         // Form validation section
 
-        //shows and error if name is left empty
+        //shows an error if name is left empty
 
-        const checkName= () => { 
-        inputName.addEventListener('keyup', (event)=> {        
-            if(inputName.value.length > 0 ){
-                inputName.style.borderColor = "green";
-                errorName.innerHTML = " ";
-               return true;
-            } else {
-                inputName.style.borderColor = "red";
-                errorName.innerHTML = "<span style ='color: red;'>" +"Please enter a name</span>";
-                return false;
-            }
-        });
-    }
-        //shows and error if empty or not a valid email format
+        const checkName = () => { 
+            inputName.addEventListener('keyup', (event) => {        
+                if(inputName.value.length > 0 ){
+                    inputName.style.borderColor = "green";
+                    errorName.innerHTML = " ";
+                    return true;
+                } else {
+                    inputName.style.borderColor = "red";
+                    errorName.innerHTML = "<span style ='color: red;'>" +"Please enter a name</span>";
+                    return false;
+                }
+            });
+        }
+    console.log(checkName());
+
+        //shows an error if empty or not a valid email format
         const checkEmail = () => {
         emailInput.addEventListener("keyup", (event)=>{
             if(emailInput.value.length === 0){
@@ -148,9 +150,11 @@ const submitButton = document.getElementById('button');
             }
         });
     }
+    console.log(checkEmail());
         //payment selection
         bitcoinOpt.style.display = 'none';
         payPalOpt.style.display = 'none';
+        chooseCredit.selected = true;
 
         //hides payment options until one is selected. Credit is displayed by default
         paymentMenu.addEventListener('change', e => {
@@ -192,6 +196,7 @@ const submitButton = document.getElementById('button');
             }
         });
     }
+    console.log(checkCardNum());
         const checkZip = () => {
         creditCardZip.addEventListener("keyup", (event)=>{
             if(creditCardZip.value.length === 0){
@@ -209,6 +214,7 @@ const submitButton = document.getElementById('button');
             }
         });
     }
+    checkZip();
         const checkCvv = () => {
         creditCardCvv.addEventListener("keyup", (event)=>{
             if(creditCardCvv.value.length === 0){
@@ -226,33 +232,29 @@ const submitButton = document.getElementById('button');
             }
         });
     }
+    console.log(checkCvv());
+        
+        
+        function isFormValid(){
+          let isUserNameValid = checkName(),
+            isEmailValid = checkEmail(), 
+            isActivityValid = checkActivityValid(),
+            isCardValid = checkCardNum(),
+            isZipValid = checkZip(),
+            isCvvValid = checkCvv();
 
-    checkActivity();
-    checkActivityValid();
-      
-     submitButton.addEventListener('click', (e) => {
+            if(isUserNameValid && isEmailValid && isActivityValid && isCardValid
+                && isZipValid && isCvvValid) {
+                    console.log("valid")
+                }
+            
 
-         let isUserNameValid = checkName(),
-         isEmailValid = checkEmail(), 
-         isActivityValid = checkActivityValid(),
-         isCardValid = checkCardNum(),
-         isZipValid = checkZip(),
-         isCvvValid = checkCvv();
+        }
+ 
+         console.log(isFormValid());
+        
 
-         let isFormValid = isUserNameValid &&
-         isEmailValid && isActivityValid && isCardValid
-         && isZipValid && isCvvValid;
-         console.log("clicked")
-
-         if (isFormValid === true){
-             return true;
-         } else {
-             return e.preventDefault();
-         }
-         
-
-     });      
-
+        
         
         
         
