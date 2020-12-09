@@ -27,247 +27,256 @@ const chooseCredit = document.querySelector('option[value="credit card"]');
 const checkboxMsg = document.createElement('div');
 const submitButton = document.getElementById('button');
 
-    //This function autofocuses the name input when the browser loads.
-    function nameFocus() {
-        document.getElementById("name").focus();
+//This function autofocuses the name input when the browser loads.
+function nameFocus() {
+  document.getElementById("name").focus();
+}
+nameFocus(name);
+
+//displays only if JavaScript is not enabled and other is selected
+otherJob.style.display = 'none';
+jobTitle.addEventListener("change", e =>{
+  if(jobTitle.value === "other"){
+    otherJob.style.display = 'block';
+  } else {
+    otherJob.style.display = 'none';
+  }
+});
+
+//unless a shirt theme is selected, the color menu will remain hidden
+shirtColor.style.display = 'none';
+shirtTheme.addEventListener("change", e =>{
+  if(shirtTheme.value === "heart js" || shirtTheme.value === "js puns"){
+    shirtColor.style.display = 'block';
+  } else {
+    shirtColor.style.display = 'none';
+  }
+})
+
+//if "js puns" or "I heart JS" is selected use change handler to make the "colors" menu update
+shirtTheme.addEventListener('change', (event) => {
+  let target = event.target.value;
+  if (target === "heart js") {
+    jsPunsCol.hidden = true;
+    heartJSCol.hidden = false;
+    tomato.selected = true;
+  } if (target === "js puns") {
+    heartJSCol.hidden = true;
+    jsPunsCol.hidden = false;
+    cornflowerblue.selected = true;
+  } 
+});
+//Event listener for activity section
+const checkActivity = () => {
+  activitySection.addEventListener('change', (e) => {
+    let activityChoice = e.target;
+    const activityValue = activityChoice.getAttribute('data-cost');
+
+    if(activityChoice.checked === true){
+      activityCost += +activityValue;
+      activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
+      activitySection.appendChild(checkboxMsg).innerHTML = " ";
+    } else if (activityChoice.checked === false){
+      activityCost -= +activityValue;
+      activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
+      activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
+    } else {
+      activityTotalDiv.style.display = 'hidden';
     }
-        nameFocus(name);
+    for(let i = 0; i < activityInput.length; i++){
+      const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
+      const currentActivity = activityChoice.getAttribute('data-day-and-time');
 
-        //displays only if JavaScript is not enabled and other is selected
-        otherJob.style.display = 'none';
-        jobTitle.addEventListener("change", e =>{
-            if(jobTitle.value === "other"){
-                otherJob.style.display = 'block';
-                } else {
-                    otherJob.style.display = 'none';
-                }
-           });
-        
-        //unless a shirt theme is selected, the color menu will remain hidden
-        shirtColor.style.display = 'none';
-        shirtTheme.addEventListener("change", e =>{
-            if(shirtTheme.value === "heart js" || shirtTheme.value === "js puns"){
-                shirtColor.style.display = 'block';
-            } else {
-                shirtColor.style.display = 'none';
-            }
-        })
-
-        //if "js puns" or "I heart JS" is selected use change handler to make the "colors" menu update
-           shirtTheme.addEventListener('change', (event) => {
-                let target = event.target.value;
-                     if (target === "heart js") {
-                        jsPunsCol.hidden = true;
-                        heartJSCol.hidden = false;
-                        tomato.selected = true;
-                    } if (target === "js puns") {
-                        heartJSCol.hidden = true;
-                        jsPunsCol.hidden = false;
-                        cornflowerblue.selected = true;
-                    } 
-               });
-        //Event listener for activity section
-       const checkActivity = () => {
-        activitySection.addEventListener('change', (e) => {
-            let activityChoice = e.target;
-            const activityValue = activityChoice.getAttribute('data-cost');
-            
-                if(activityChoice.checked === true){
-                    activityCost += +activityValue;
-                    activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
-                    activitySection.appendChild(checkboxMsg).innerHTML = " ";
-                } else if (activityChoice.checked === false){
-                    activityCost -= +activityValue;
-                    activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
-                    activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
-                } else {
-                    activityTotalDiv.style.display = 'hidden';
-                }
-              for(let i = 0; i < activityInput.length; i++){
-                    const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
-                    const currentActivity = activityChoice.getAttribute('data-day-and-time');
-                    
-                    if(currentActivity === activityDayTime && activityChoice !== activityInput[i]){
-                        if(activityChoice.checked === true){
-                            activityInput[i].disabled = true;
-                        } else {
-                            activityInput[i].disabled = false;
-                        }
-                    } 
-                }  
-            });
+      if(currentActivity === activityDayTime && activityChoice !== activityInput[i]){
+        if(activityChoice.checked === true){
+          activityInput[i].disabled = true;
+        } else {
+          activityInput[i].disabled = false;
         }
-        checkActivity();
-        
-        //Make sure at least one activity is selected before submitting form
-        const checkActivityValid = () => {
-            let checkbox = document.querySelector('input[type="checkbox"]:checked');
-                if(checkbox !== null){
-                    return true;
-                } else {
-                    activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
-                    return false;
-                    } 
-                
-                }
-        
-        console.log(checkActivityValid());
-        // Form validation section
+      } 
+    }  
+  });
+}
+checkActivity();
 
-        //shows an error if name is left empty
+//Make sure at least one activity is selected before submitting form
+const checkActivityValid = () => {
+  let checkbox = document.querySelector('input[type="checkbox"]:checked');
+  if(checkbox !== null){
+    return true;
+  } else {
+    activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
+    return false;
+  } 
 
-        const checkName = () => { 
-            inputName.addEventListener('keyup', (event) => {        
-                if(inputName.value.length > 0 ){
-                    inputName.style.borderColor = "green";
-                    errorName.innerHTML = " ";
-                    return true;
-                } else {
-                    inputName.style.borderColor = "red";
-                    errorName.innerHTML = "<span style ='color: red;'>" +"Please enter a name</span>";
-                    return false;
-                }
-            });
-        }
-    console.log(checkName());
+}
 
-        //shows an error if empty or not a valid email format
-        const checkEmail = () => {
-        emailInput.addEventListener("keyup", (event)=>{
-            if(emailInput.value.length === 0){
-                errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
-                emailInput.style.borderColor = "red";
-                return false;
-            } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value) !== true){
-                errorMail.innerHTML = "<span style ='color: red;'>" +"Email must contain (.) and (@)</span>"
-                emailInput.style.borderColor = "red";
-                return false;
-            } else {
-                emailInput.style.borderColor = "green";
-                errorMail.innerHTML = " ";
-                return true;
+console.log(checkActivityValid());
+// Form validation section
 
-            }
-        });
+//shows an error if name is left empty
+
+const checkName = () => {
+  let target = inputName;
+  let errorElement = document.querySelector(target.dataset.invalidElement);
+  let invalidMessage = target.dataset.invalidMessage;
+
+  if(target.value.length > 0 ){
+    target.style.borderColor = "green";
+    errorElement.innerHTML = " ";
+    return true;
+  } else {
+    target.style.borderColor = "red";
+    errorElement.innerHTML = `<span style ='color: red;'>${invalidMessage}</span>`;
+    return false;
+  }
+}
+
+const validatePresence = (event) => {
+  event.preventDefault();
+  checkName();
+}
+
+inputName.addEventListener('blur', validatePresence);
+inputName.addEventListener('keyup', validatePresence);
+
+//shows an error if empty or not a valid email format
+const checkEmail = () => {
+  emailInput.addEventListener("keyup", (event)=>{
+    if(emailInput.value.length === 0){
+      errorMail.innerHTML = "<span style ='color: red;'>" +"Please enter an email address</span>"
+      emailInput.style.borderColor = "red";
+      return false;
+    } else if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value) !== true){
+      errorMail.innerHTML = "<span style ='color: red;'>" +"Email must contain (.) and (@)</span>"
+      emailInput.style.borderColor = "red";
+      return false;
+    } else {
+      emailInput.style.borderColor = "green";
+      errorMail.innerHTML = " ";
+      return true;
+
     }
-    console.log(checkEmail());
-        //payment selection
-        bitcoinOpt.style.display = 'none';
-        payPalOpt.style.display = 'none';
-        chooseCredit.selected = true;
+  });
+}
+console.log(checkEmail());
+//payment selection
+bitcoinOpt.style.display = 'none';
+payPalOpt.style.display = 'none';
+chooseCredit.selected = true;
 
-        //hides payment options until one is selected. Credit is displayed by default
-        paymentMenu.addEventListener('change', e => {
-            if(paymentMenu.value === "paypal" ){
-                creditCardOpt.style.display = 'none';
-                bitcoinOpt.style.display = 'none';
-                payPalOpt.style.display = 'block';
-            }else if(paymentMenu.value === "bitcoin"){
-                creditCardOpt.style.display = 'none';
-                bitcoinOpt.style.display = 'block';
-                payPalOpt.style.display = 'none';
-            } else {
-                creditCardOpt.style.display = 'block';
-                bitcoinOpt.style.display = 'none';
-                payPalOpt.style.display = 'none';
-            }
-            
-        });
+//hides payment options until one is selected. Credit is displayed by default
+paymentMenu.addEventListener('change', e => {
+  if(paymentMenu.value === "paypal" ){
+    creditCardOpt.style.display = 'none';
+    bitcoinOpt.style.display = 'none';
+    payPalOpt.style.display = 'block';
+  }else if(paymentMenu.value === "bitcoin"){
+    creditCardOpt.style.display = 'none';
+    bitcoinOpt.style.display = 'block';
+    payPalOpt.style.display = 'none';
+  } else {
+    creditCardOpt.style.display = 'block';
+    bitcoinOpt.style.display = 'none';
+    payPalOpt.style.display = 'none';
+  }
 
-        //credit card validation
-        let creditCardNum = document.getElementById("cc-num");
-        let creditCardZip = document.getElementById("zip");
-        let creditCardCvv = document.getElementById("cvv");
-        
-        const checkCardNum = () => {
-        creditCardNum.addEventListener("keyup", (event)=>{
-            if(creditCardNum.value.length === 0){
-                errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
-                creditCardNum.style.borderColor = "red";
-                return false;
-            } else if(/^\d{4}([ \-]?)((\d{6}\1?\d{5})|(\d{4}\1?\d{4}\1?\d{4}))$/.test(creditCardNum.value) !== true){
-                errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
-                creditCardNum.style.borderColor = "red";
-                return false;
-            } else {
-                creditCardNum.style.borderColor = "green";
-                errorCardNum.innerHTML = " ";
-               return true;
-            }
-        });
+});
+
+//credit card validation
+let creditCardNum = document.getElementById("cc-num");
+let creditCardZip = document.getElementById("zip");
+let creditCardCvv = document.getElementById("cvv");
+
+const checkCardNum = () => {
+  creditCardNum.addEventListener("keyup", (event)=>{
+    if(creditCardNum.value.length === 0){
+      errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+      creditCardNum.style.borderColor = "red";
+      return false;
+    } else if(/^\d{4}([ \-]?)((\d{6}\1?\d{5})|(\d{4}\1?\d{4}\1?\d{4}))$/.test(creditCardNum.value) !== true){
+      errorCardNum.innerHTML = "<span style ='color: red;'>" +"Please enter a valid card number</span>"
+      creditCardNum.style.borderColor = "red";
+      return false;
+    } else {
+      creditCardNum.style.borderColor = "green";
+      errorCardNum.innerHTML = " ";
+      return true;
     }
-    console.log(checkCardNum());
-        const checkZip = () => {
-        creditCardZip.addEventListener("keyup", (event)=>{
-            if(creditCardZip.value.length === 0){
-                errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a zipcode</span>"
-                creditCardZip.style.borderColor = "red";
-                return false;
-            }else if(/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(creditCardZip.value) !== true){
-                    errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a valid zip code</span>"
-                    creditCardZip.style.borderColor = "red";
-                    return false;
-            } else {
-                creditCardZip.style.borderColor = "green";
-                errorZip.innerHTML = " ";
-              return true;
-            }
-        });
+  });
+}
+console.log(checkCardNum());
+const checkZip = () => {
+  creditCardZip.addEventListener("keyup", (event)=>{
+    if(creditCardZip.value.length === 0){
+      errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a zipcode</span>"
+      creditCardZip.style.borderColor = "red";
+      return false;
+    }else if(/(^\d{5}$)|(^\d{5}-\d{4}$)/.test(creditCardZip.value) !== true){
+      errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a valid zip code</span>"
+      creditCardZip.style.borderColor = "red";
+      return false;
+    } else {
+      creditCardZip.style.borderColor = "green";
+      errorZip.innerHTML = " ";
+      return true;
     }
-    checkZip();
-        const checkCvv = () => {
-        creditCardCvv.addEventListener("keyup", (event)=>{
-            if(creditCardCvv.value.length === 0){
-                errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a CVV</span>"
-                creditCardCvv.style.borderColor = "red";
-                return false;
-            } else if(/(^\d{3}$)/.test(creditCardCvv.value) !== true){
-                errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a valid CVV</span>"
-                creditCardCvv.style.borderColor = "red";
-                return false;
-            } else {
-                creditCardCvv.style.borderColor = "green";
-                errorCvv.innerHTML = " ";
-               return true;
-            }
-        });
+  });
+}
+checkZip();
+const checkCvv = () => {
+  creditCardCvv.addEventListener("keyup", (event)=>{
+    if(creditCardCvv.value.length === 0){
+      errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a CVV</span>"
+      creditCardCvv.style.borderColor = "red";
+      return false;
+    } else if(/(^\d{3}$)/.test(creditCardCvv.value) !== true){
+      errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a valid CVV</span>"
+      creditCardCvv.style.borderColor = "red";
+      return false;
+    } else {
+      creditCardCvv.style.borderColor = "green";
+      errorCvv.innerHTML = " ";
+      return true;
     }
-    console.log(checkCvv());
-        
-        
-        function isFormValid(){
-          let isUserNameValid = checkName(),
-            isEmailValid = checkEmail(), 
-            isActivityValid = checkActivityValid(),
-            isCardValid = checkCardNum(),
-            isZipValid = checkZip(),
-            isCvvValid = checkCvv();
+  });
+}
+console.log(checkCvv());
 
-            if(isUserNameValid && isEmailValid && isActivityValid && isCardValid
-                && isZipValid && isCvvValid) {
-                    console.log("valid")
-                }
-            
 
-        }
- 
-         console.log(isFormValid());
-        
+function isFormValid(){
+  let isUserNameValid = checkName(),
+    isEmailValid = checkEmail(), 
+    isActivityValid = checkActivityValid(),
+    isCardValid = checkCardNum(),
+    isZipValid = checkZip(),
+    isCvvValid = checkCvv();
 
-        
-        
-        
-        
+  if(isUserNameValid && isEmailValid && isActivityValid && isCardValid
+    && isZipValid && isCvvValid) {
+    console.log("valid")
+  }
+
+
+}
+
+console.log(isFormValid());
 
 
 
- 
-
-        
 
 
 
-    
 
-        
-    
+
+
+
+
+
+
+
+
+
+
+
+
