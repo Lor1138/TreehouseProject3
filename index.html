@@ -14,7 +14,7 @@
       <h1>Full Stack Conf</h1>
     </header>
 
-    <form action="index.html" method="post" novalidate>
+    <form id="form" action="index.html" method="post" novalidate>
               
       <fieldset>         
         <legend>Basic Info</legend>
@@ -27,7 +27,10 @@
         <span id="errorName" class="error" aria-live="polite"></span>
         
         <label for="mail">Email:</label>
-        <input type="email" id="mail" name="user-email">
+        <input type="email" id="mail" name="user-email"
+                                     autofocus
+                                     data-invalid-element="#errorEmail"
+                                     data-invalid-message="Please enter an email">
         <span id="errorMail" class="error" aria-live="polite"></span>
         
         

@@ -133,6 +133,7 @@ const validateName = (event) => {
 
 inputName.addEventListener('blur', validateName);
 inputName.addEventListener('keyup', validateName);
+console.log(checkName());
 
 //shows an error if empty or not a valid email format
 const checkEmail = () => {
@@ -157,6 +158,7 @@ const validateEmail = (event) => {
 }
 emailInput.addEventListener('blur', validateEmail);
 emailInput.addEventListener('keyup', validateEmail);
+console.log(checkEmail());
 
 //payment selection
 bitcoinOpt.style.display = 'none';
@@ -209,10 +211,16 @@ const validateCardNum = (event) => {
   checkCardNum();
 }
 creditCardNum.addEventListener('keyup', validateCardNum);
-
 console.log(checkCardNum());
+
 const checkZip = () => {
-  creditCardZip.addEventListener("keyup", (event)=>{
+    creditCardZip.style.borderColor = "green";
+    errorZip.innerHTML = " ";
+
+    if( paymentMenu.value !== "credit card" ) {
+        return true;
+      }
+
     if(creditCardZip.value.length === 0){
       errorZip.innerHTML = "<span style ='color: red;'>" +"Please enter a zipcode</span>"
       creditCardZip.style.borderColor = "red";
@@ -222,15 +230,25 @@ const checkZip = () => {
       creditCardZip.style.borderColor = "red";
       return false;
     } else {
-      creditCardZip.style.borderColor = "green";
-      errorZip.innerHTML = " ";
       return true;
     }
-  });
 }
-checkZip();
+const validateZip = (event) => {
+    event.preventDefault();
+    checkZip();
+}
+creditCardZip.addEventListener('keyup', validateZip);
+console.log(checkZip());
+
 const checkCvv = () => {
-  creditCardCvv.addEventListener("keyup", (event)=>{
+
+    creditCardCvv.style.borderColor = "green";
+    errorCvv.innerHTML = " ";
+
+    if( paymentMenu.value !== "credit card" ) {
+        return true;
+      }
+ 
     if(creditCardCvv.value.length === 0){
       errorCvv.innerHTML = "<span style ='color: red;'>" +"Please enter a CVV</span>"
       creditCardCvv.style.borderColor = "red";
@@ -240,16 +258,21 @@ const checkCvv = () => {
       creditCardCvv.style.borderColor = "red";
       return false;
     } else {
-      creditCardCvv.style.borderColor = "green";
-      errorCvv.innerHTML = " ";
       return true;
     }
-  });
 }
+
+const validateCvv = (event) =>{
+    event.preventDefault();
+    checkCvv();
+}
+creditCardCvv.addEventListener('keyup', validateCvv);
 console.log(checkCvv());
 
 
-function isFormValid(){
+//Form validation submit handler
+const form = document.getElementById('form');
+const isFormValid = () => {
   let isUserNameValid = checkName(),
     isEmailValid = checkEmail(), 
     isActivityValid = checkActivityValid(),
@@ -259,13 +282,21 @@ function isFormValid(){
 
   if(isUserNameValid && isEmailValid && isActivityValid && isCardValid
     && isZipValid && isCvvValid) {
-    console.log("valid")
+    return true;
+  } else {
+      return false;
   }
-
-
 }
+console.log(isFormValid())
+form.addEventListener('submit', isFormValid);
 
-//console.log(isFormValid());
+
+
+
+
+
+
+
 
 
 
