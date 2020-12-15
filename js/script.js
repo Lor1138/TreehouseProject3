@@ -288,7 +288,13 @@ const isFormValid = () => {
   }
 }
 console.log(isFormValid())
-form.addEventListener('submit', isFormValid);
+submitButton.addEventListener('click', (e) => {
+    if (isFormValid()){
+        return true
+    } else{
+        e.preventDefault();
+    }
+});
 
 
 
