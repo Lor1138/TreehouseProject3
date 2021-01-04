@@ -71,11 +71,11 @@ const checkActivity = () => {
       activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
       activitySection.appendChild(checkboxMsg).innerHTML = " ";
     } else if (activityChoice.checked === false){
-      activityCost -= +activityValue;
-      activitySection.appendChild(activityTotalDiv).innerText = `Total: $${activityCost}`;
-      activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
+        activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity ";
+        activityCost -= +activityValue;
     } else {
-      activityTotalDiv.style.display = 'hidden';
+        activitySection.appendChild(checkboxMsg).innerHTML = " ";
+        activityTotalDiv.innerHTML = " ";
     }
     for(let i = 0; i < activityInput.length; i++){
       const activityDayTime = activityInput[i].getAttribute('data-day-and-time');
@@ -95,33 +95,39 @@ checkActivity();
 
 //Make sure at least one activity is selected before submitting form
 const checkActivityValid = () => {
-  let checkbox = document.querySelector('input[type="checkbox"]:checked');
-  if(checkbox !== null){
+  let checkbox = activityInput.forEach(element => {
+    console.log(element);
+  
+  if(checkbox() !== null){
+    activitySection.removeChild(checkboxMsg).innerHTML = "Please select at least one activity";
     return true;
   } else {
     activitySection.appendChild(checkboxMsg).innerHTML = "Please select at least one activity";
     return false;
   } 
-
+  
+});
 }
 
-console.log(checkActivityValid());
+const validateActivity = (event) => {
+    event.preventDefault();
+    checkActivityValid();
+  }
+  
+
 // Form validation section
 
 //shows an error if name is left empty
 
 const checkName = () => {
-  let target = inputName;
-  let errorElement = document.querySelector(target.dataset.invalidElement);
-  let invalidMessage = target.dataset.invalidMessage;
 
-  if(target.value.length > 0 ){
-    target.style.borderColor = "green";
-    errorElement.innerHTML = " ";
+  if(inputName.value.length > 0 ){
+    inputName.style.borderColor = "green";
+    errorName.innerHTML = " ";
     return true;
   } else {
-    target.style.borderColor = "red";
-    errorElement.innerHTML = `<span style ='color: red;'>${invalidMessage}</span>`;
+    inputName.style.borderColor = "red";
+    errorName.innerHTML = "<span style ='color: red;'>" + "Please enter a name</span>"
     return false;
   }
 }
@@ -131,9 +137,9 @@ const validateName = (event) => {
   checkName();
 }
 
+
 inputName.addEventListener('blur', validateName);
 inputName.addEventListener('keyup', validateName);
-console.log(checkName());
 
 //shows an error if empty or not a valid email format
 const checkEmail = () => {
@@ -156,9 +162,9 @@ const validateEmail = (event) => {
   event.preventDefault();
   checkEmail();
 }
-emailInput.addEventListener('blur', validateEmail);
-emailInput.addEventListener('keyup', validateEmail);
-console.log(checkEmail());
+
+emailInput.addEventListener('blur', checkEmail);
+emailInput.addEventListener('keyup', checkEmail);
 
 //payment selection
 bitcoinOpt.style.display = 'none';
@@ -210,8 +216,8 @@ const validateCardNum = (event) => {
   event.preventDefault();
   checkCardNum();
 }
-creditCardNum.addEventListener('keyup', validateCardNum);
-console.log(checkCardNum());
+
+creditCardNum.addEventListener('keyup', checkCardNum);
 
 const checkZip = () => {
     creditCardZip.style.borderColor = "green";
@@ -233,12 +239,12 @@ const checkZip = () => {
       return true;
     }
 }
+
 const validateZip = (event) => {
     event.preventDefault();
     checkZip();
 }
-creditCardZip.addEventListener('keyup', validateZip);
-console.log(checkZip());
+creditCardZip.addEventListener('keyup', checkZip);
 
 const checkCvv = () => {
 
@@ -265,9 +271,8 @@ const checkCvv = () => {
 const validateCvv = (event) =>{
     event.preventDefault();
     checkCvv();
-}
-creditCardCvv.addEventListener('keyup', validateCvv);
-console.log(checkCvv());
+} 
+creditCardCvv.addEventListener('keyup', checkCvv);
 
 
 //Form validation submit handler
@@ -287,7 +292,7 @@ const isFormValid = () => {
       return false;
   }
 }
-console.log(isFormValid())
+
 submitButton.addEventListener('click', (e) => {
     if (isFormValid()){
         return true
